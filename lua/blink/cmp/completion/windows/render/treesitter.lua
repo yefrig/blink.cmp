@@ -35,7 +35,9 @@ end
 function treesitter._highlight(ctx)
   local ret = {} ---@type blink.cmp.DrawHighlight[]
 
-  local source = ctx.label
+  -- Some language servers like jdtls only include the function name in the label.
+  -- Without parenthesis and parameters, tressitter miss-highlights functions as variables.
+  local source = ctx.label .. (ctx.label_detail or '')
   local lang = vim.treesitter.language.get_lang(vim.bo.filetype)
   if not lang then return ret end
 
